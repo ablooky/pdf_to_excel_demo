@@ -101,9 +101,49 @@ for(r in 1:nrow(modified_df3)){
   }
 }
 
+#merging lines according to indexes
+
+merged_index<-sort(unique(c(multi_cas_index,multi_date_index,multi_name_index,
+                multi_tox_index)))
+
+modified_df4<-data.frame()
+for(r in 1:nrow(modified_df3)){
+ 
+  if(r %in% merged_index){
+    #skip
+  } else {
+    print(r)
+    temp_row<-modified_df3[r,]
+    if((r+1) %in% multi_name_index){
+      temp_row$Chemical[1]<-paste(modified_df3[r,'Chemical'],
+                                  modified_df3[r+1,'Chemical'],
+                                  sep = ' ')
+    } 
+    if((r+1) %in% multi_tox_index){
+      temp_row$`Type of Toxicity`[1]<-paste(modified_df3$`Type of Toxicity`[r],
+                                            modified_df3[r+1,'Type of Toxicity'],
+                                            sep = ' ')
+    }
+    if((r+1) %in% multi_cas_index){
+      temp_row$`CAS No.`[1]<-paste(modified_df3[r,'CAS No.'],
+                                   modified_df3[r+1,'CAS No.'],
+                                   sep = '; ')
+    }
+    if((r+1) %in% multi_date_index){
+      temp_row$`Date Listed`[1]<-paste(modified_df3[r,'Date Listed'],
+                                       modified_df3[r+1,'Date Listed'],
+                                       sep = '; ')
+    }
+    
+    
+    modified_df4<-bind_rows(modified_df4,temp_row)
+    
+  }
+  
+  
+}
 
 
-
-final_df<-modified_df
+final_df<-modified_df4
 openxlsx::write.xlsx(final_df, 'California P65 EPA Known Carcinogens.xlsx')
 
