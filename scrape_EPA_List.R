@@ -156,6 +156,7 @@ final_df<-modified_df4
 wb <- createWorkbook()
 addWorksheet(wb, 'Chemicals List')
 writeDataTable(wb, 1, x = final_df, 
-               tableStyle = "TableStyleMedium7")
-
+               tableStyle = "TableStyleMedium9")
+setColWidths(wb, sheet = 1, cols = 1:4, widths = "auto")
 saveWorkbook(wb, file = "California P65 EPA Known Carcinogens.xlsx", overwrite = TRUE)
+
