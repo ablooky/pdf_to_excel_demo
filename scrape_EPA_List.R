@@ -60,7 +60,9 @@ for( r in 1:nrow(modified_df2)){
   if(grepl('Date',modified_df2[r,'Chemical'])){
     print(r)
     temp_row$`Date Listed`[1]<-temp_row$Chemical[1]
-    temp_row$Chemical[1]<-NA
+    temp_row$Chemical[1]<-''
+    temp_row$`Type of Toxicity`[1]<- ''
+    temp_row$`CAS No.`[1] <-''
   }
   modified_df3[r,]<-temp_row[1,]
 }
@@ -72,10 +74,34 @@ multi_cas_index<-c()
 multi_date_index<-c()
 
 for(r in 1:nrow(modified_df3)){
-  
+  print(r)
+  if(modified_df3$Chemical[r] != ''  && 
+     modified_df3$`Type of Toxicity`[r] == '' &&
+     modified_df3$`CAS No.`[r] == '' && 
+     modified_df3$`Date Listed`[r]== ''){
+    multi_name_index<-c(multi_name_index,r)
+  }
+  if(modified_df3$Chemical[r] == ''  && 
+     modified_df3$`Type of Toxicity`[r] != '' &&
+     modified_df3$`CAS No.`[r] == '' && 
+     modified_df3$`Date Listed`[r]== ''){
+    multi_tox_index<-c(multi_tox_index,r)
+  }
+  if(modified_df3$Chemical[r] == ''  && 
+     modified_df3$`Type of Toxicity`[r] == '' &&
+     modified_df3$`CAS No.`[r] != '' && 
+     modified_df3$`Date Listed`[r] == ''){
+    multi_cas_index<-c(multi_cas_index,r)
+  }
+  if(modified_df3$Chemical[r] == ''  && 
+     modified_df3$`Type of Toxicity`[r] == '' &&
+     modified_df3$`CAS No.`[r] == '' && 
+     modified_df3$`Date Listed`[r] != ''){
+    multi_date_index<-c( multi_date_index,r)
+  }
 }
 
-modified_df3[which]
+
 
 
 final_df<-modified_df
