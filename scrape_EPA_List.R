@@ -101,10 +101,16 @@ for(r in 1:nrow(modified_df3)){
   }
 }
 
+#Hard coding indexes
+multi_name_index<-c(169,586,588, multi_name_index)
+multi_tox_index<-c(749,multi_tox_index)
+multi_cas_index<-c(749,multi_cas_index)
+multi_date_index<-c(749, multi_date_index)
+
 #merging lines according to indexes
 
 merged_index<-sort(unique(c(multi_cas_index,multi_date_index,multi_name_index,
-                multi_tox_index)))
+               multi_tox_index)))
 
 modified_df4<-data.frame()
 for(r in 1:nrow(modified_df3)){
@@ -145,5 +151,11 @@ for(r in 1:nrow(modified_df3)){
 
 
 final_df<-modified_df4
-openxlsx::write.xlsx(final_df, 'California P65 EPA Known Carcinogens.xlsx')
 
+#Exporting document
+wb <- createWorkbook()
+addWorksheet(wb, 'Chemicals List')
+writeDataTable(wb, 1, x = final_df, 
+               tableStyle = "TableStyleMedium7")
+
+saveWorkbook(wb, file = "California P65 EPA Known Carcinogens.xlsx", overwrite = TRUE)
